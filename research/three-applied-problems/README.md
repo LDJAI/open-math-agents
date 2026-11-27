@@ -14,7 +14,10 @@ The detailed notes identify the target, proof, scope, and related research. To r
 
 ## Formal verification
 
-- [Jensen.lean](Jensen.lean) proves uniqueness of the worst positive parameter for every admissible finite list. The proof's derivative lemmas establish the increase and decrease on opposite sides of the maximizer.
+- [Jensen.lean](Jensen.lean) proves uniqueness of the worst positive parameter for every admissible finite list. The proof's derivative lemmas establish the increase and decrease on opposite sides of the maximizer. The [registry-format proof](mo-204379.lean) independently checks the same conclusion against the [proposed Left to Solve statement](https://github.com/GuillaumeBAUD-coder/open-math-agents/pull/1168).
+- [OrthogonalRounding.lean](OrthogonalRounding.lean) disproves the universal nearest-target conjecture using the dimension-five counterexample. Its [registry-format disproof](mo-364377.lean) checks against the [proposed registry statement](https://github.com/GuillaumeBAUD-coder/open-math-agents/pull/1152). The general reflection family, equal-determinant example, and slack variants are proved in the [rounding note](orthogonal-rounding.md).
 - [LocalArea.lean](LocalArea.lean) proves the footprint-contraction lemma with real Euclidean area. The global depth and shortest-bisector estimates appear in the [geometry proof](solberg-disk-bisection.md).
+
+The listed Lean conclusions depend only on propositional extensionality, classical choice, and quotient soundness. Local Lean verification and upstream acceptance are separate steps.
 
 [Printable version of all three proofs](three-applied-math-proofs.pdf)
