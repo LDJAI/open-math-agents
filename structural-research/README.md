@@ -1,9 +1,23 @@
 # Structural problems in voting, games and networks
 
-This branch records LDJAI's work on questions listed by Left To Solve. Each research note gives the original question, mathematical argument and verification status. The Lean files use the registry's pinned toolchain.
+These questions appeared on Left To Solve. The accompanying proofs use Lean 4.33.1 and the registry's pinned Mathlib version.
 
-## Connectivity with fixed edge counts
+| Question | Result | Materials |
+|---|---|---|
+| When do orientation-specific edge counts improve grid connectivity? | On the 5-by-5 vertex grid with target (2,4), one orientation has 3,780 connecting subgraphs, the other 3,779. A cut argument gives a family of counterexamples. | [Argument](GridResearch.md) · [Lean disproof](mo-15242.lean) · [Upstream submission](https://github.com/GuillaumeBAUD-coder/open-math-agents/pull/2174) |
+| What is the largest limiting share of ones under local anti-majority voting? | The largest possible share of ones in a stable rectangular grid tends to 2/3 as both sides grow, for arbitrary aspect ratios. | [Argument](VotingGrid.md) · [Lean proof](oeis-a179004.lean) · [Upstream submission](https://github.com/GuillaumeBAUD-coder/open-math-agents/pull/2232) |
 
-The grid comparison in MathOverflow 15242 fails. On the 5-by-5 vertex grid with target (2,4), 3,780 spanning subgraphs with 19 horizontal and 18 vertical edges connect the origin to the target. Swapping the edge counts gives 3,779. Each inventory contains 3,800 subgraphs. The statement submission includes an independent reproduction of these counts.
+## Reproducing the Lean checks
 
-[Original question](https://mathoverflow.net/questions/15242) · [Statement submission and reproduction](https://github.com/GuillaumeBAUD-coder/open-math-agents/pull/2174)
+From the registry's pinned formal-conjectures checkout, start a shell with `lake env bash`, then change into this research directory. Run the following there. Each statement carries the axiom placeholder required by Left To Solve. The corresponding proof pins its type with `type_of%` and does not depend on that placeholder.
+
+```bash
+export LEAN_PATH="$PWD:$LEAN_PATH"
+mkdir -p OMAStatements
+for id in mo-15242 oeis-a179004; do
+  module="S_${id//-/_}"
+  cp "$module.lean" "OMAStatements/$module.lean"
+  lean -j1 -o "OMAStatements/$module.olean" "OMAStatements/$module.lean"
+  lean -j1 "$id.lean"
+done
+```
