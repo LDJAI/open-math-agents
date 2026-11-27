@@ -1,0 +1,197 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,geometry,xcolor,hyperref}
+\geometry{left=.91in,right=.91in,top=.72in,bottom=.76in}
+\definecolor{dark}{HTML}{193238}
+\definecolor{teal}{HTML}{15656B}
+\hypersetup{colorlinks=true,urlcolor=teal,linkcolor=teal,
+pdftitle={Bipartite matching counts, overlapping Hamming scans, and slice lengths},
+pdfauthor={LDJAI with OpenAI Codex}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus .4pt}
+\setlength{\abovedisplayskip}{6pt plus 1pt}
+\setlength{\belowdisplayskip}{6pt plus 1pt}
+\newcommand{\head}[1]{\par\vspace{5pt}{\large\bfseries\color{dark}#1}\par}
+\newcommand{\sect}[2]{{\small\sffamily\bfseries\color{teal}#1}\par
+\vspace{1pt}{\Large\bfseries\color{dark}#2}\par}
+\newcommand{\strong}[1]{\textbf{\color{dark}#1}\enspace}
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\N}{\mathbb N}
+\newcommand{\src}[2]{\href{#1}{#2}}
+\newcommand{\eop}{\hfill$\square$}
+\begin{document}
+{\small\sffamily\bfseries\color{teal} MATHEMATICAL RESEARCH NOTES}
+\hfill {\small November 2026}
+
+{\LARGE\bfseries\color{dark} Bipartite matching counts, overlapping\\[2pt]
+Hamming scans, and slice lengths\par}
+{\small LDJAI with OpenAI Codex}
+
+We study three questions posed between 2012 and 2014. The first concerns recognition of the matching counts of a graph. The second asks for an explicit expectation when comparisons of binary strings share input bits. The third asks how regular the lengths of parallel slices of a continuously differentiable graph must be.
+
+\sect{COMBINATORICS}{1. An inverse theorem for matching counts}
+
+For a finite simple bipartite graph $G$, let $m_j(G)$ count its $j$-edge matchings, with $m_0(G)=1$. Write $R_G(z)=\sum_{j\ge0}m_j(G)z^j$. Viewing edges as allowed squares on a chessboard identifies matchings with placements of nonattacking rooks. Mitchell described this inverse problem in 2004 and gave a root-based criterion for Ferrers boards~[1]. When the unrestricted question was posed in 2012, Brendan McKay wrote, \textquotedblleft I very much doubt that a complete classification is possible\textquotedblright~[2].
+
+\strong{Theorem 1.} For each $k\ge1$, the vectors of matching counts of exact degree $k$ have a finite polynomial parametrization. Each family uses at most $2^k-1$ nonnegative integer parameters. Its $j$th coordinate has total degree at most $j$. A valid choice gives a realizing graph.
+
+To specify one family choose disjoint sets $A,B$, with $|A|+|B|=k$, and a subset $H\subseteq A\times B$. Put $C=A\sqcup B$, and let $\mathcal S$ consist of all nonempty subsets of $A$ and all nonempty subsets of $B$. Give each $S\in\mathcal S$ one parameter $p_S\in\mathbb N_0$. In the commutative ring
+\[
+ \mathcal R=\mathbb Z[z,x_i:i\in C]/(x_i^2:i\in C),
+\]
+let $L$ be the $\mathbb Z[z]$-linear map sending every squarefree monomial in the $x_i$ to 1, including the constant monomial. The family consists of the polynomials
+\[
+ L\!\left(\prod_{(i,j)\in H}(1+z x_i x_j)
+        \prod_{S\in\mathcal S}\left(1+z\sum_{i\in S}x_i\right)^{p_S}\right).
+ \tag{1}
+\]
+Retain the outputs with positive coefficient of $z^k$. For $k=0$ the only polynomial is 1.
+
+\newpage
+\sect{BIPARTITE MATCHINGS}{Proof and constructive recognition}
+
+Let $R_G$ have degree $k$. By K\H onig's theorem, a bipartite graph with maximum matching size $k$ has a vertex cover $C$ of size $k$~[3]. Let $A,B$ be its two parts and $H$ the edges within the cover. Discard isolated vertices. Every vertex outside the cover has a nonempty neighborhood $S$ lying entirely in one part of $C$. Let $p_S$ count the vertices with precisely this neighborhood.
+
+In (1), choosing $z x_i x_j$ selects a core edge. For an outside vertex of type $S$, the factor $1+z\sum_{i\in S}x_i$ selects either no edge or one edge to a neighbor. A conflict at a cover vertex produces $x_i^2=0$. All surviving choices are matchings, counted once and graded by their size. Conversely, start with $H$ and, for every $S$, add $p_S$ vertices adjacent exactly to $S$ on the opposite side. Formula (1) yields their graph's matching polynomial. No matching can contain more than $k$ edges, since each edge meets $C$.
+
+Writing $x_U=\prod_{i\in U}x_i$ and $(p)_d=p(p-1)\cdots(p-d+1)$ with $(p)_0=1$ gives
+\[
+ \left(1+z\sum_{i\in S}x_i\right)^p
+    =\sum_{U\subseteq S}(p)_{|U|}\,z^{|U|}x_U .
+\]
+The coefficient assigns the distinct members of $U$ to distinct outside vertices. It has degree $|U|$ in $p$. Degrees therefore sum to at most $j$ in the coefficient of $z^j$. There are $2^{|A|}+2^{|B|}-2\le2^k-1$ parameters and only finitely many choices of $A,B,H$ up to labeling. \eop
+
+\head{An arithmetic test}
+The edge count gives the budget
+\[
+ e=m_1=|H|+\sum_{S\in\mathcal S}|S|p_S .
+\]
+Enumerate its nonnegative solutions for each family and compare (1) with the input polynomial. Every parameter is at most $e$. For fixed $k$, this costs at most $f(k)(e+1)^{2^k-1}\operatorname{poly}(\ell)$ bit operations, where $\ell$ is the binary input length. This is pseudopolynomial at fixed $k$. It provides a bounded arithmetic test with auxiliary parameters. A comparably short intrinsic coefficient criterion remains a separate question.
+
+For example, $1+4z+z^2$ has real roots but is unrealizable. In a $2+0$ cover, let $u,v,w$ count neighbors of the first vertex only, the second only, and both. Then $e=u+v+2w$ and $m_2=(u+w)(v+w)-w$. In a $1+1$ cover, $e=u+v+h$ and $m_2=uv$, where $h$ indicates the core edge. At $e=4$, the possibilities in either split are $0,2,3,4$.
+
+Independent edge-subset enumeration over all 68,406 labeled $5$ by $5$ boards with at most five edges gives exactly the 29 vectors generated by (1), including the empty vector. Every graph with at most five edges fits on this board after removing isolated vertices.
+
+\newpage
+\sect{PROBABILITY ON STRINGS}{2. The best overlapping Hamming match}
+
+Let $A_0,\ldots,A_{n-1}$ and $B_0,\ldots,B_{n+k-2}$ be mutually independent fair bits, with $n,k\ge1$. For shifts $0\le i<k$, let $D_i$ count the mismatches between $A$ and the length-$n$ window of $B$ starting at $i$. The statistic of interest is $X=\min_i D_i$. In 2013 Anthony Quas commented, \textquotedblleft I doubt that you can give an explicit function\textquotedblright~[4]. The following formula is finite for every $n,k$ and uses the overlap graph to identify exactly the surviving terms.
+
+Make a bipartite graph with a vertex for each random bit. For shift $i$, include the edge set $E_i=\{(A_t,B_{t+i}):0\le t<n\}$. The $nk$ edges are distinct. Write $\mathcal E$ for the subsets of edges in which all vertices have even degree, including the empty set. For $H\in\mathcal E$ put $h_i(H)=|H\cap E_i|$. Define
+\[
+ Q_h(z)=(1+z)^{n-h}(1-z)^h,\qquad
+ C_r(h)=\sum_{d=r}^{n}[z^d]Q_h(z).
+\]
+Each $C_r(h)$ is an explicit sum of binomial coefficients by expansion.
+
+\strong{Theorem 2.} The joint probability generating function and expected minimum are
+\begin{align}
+ \E\!\left[\prod_{i=0}^{k-1}z_i^{D_i}\right]
+   &=2^{-nk}\sum_{H\in\mathcal E}\prod_{i=0}^{k-1}Q_{h_i(H)}(z_i), \tag{2}\\
+ \E X
+   &=2^{-nk}\sum_{r=1}^{n}\sum_{H\in\mathcal E}
+                    \prod_{i=0}^{k-1}C_r(h_i(H)). \tag{3}
+\end{align}
+
+\strong{Proof.} For an edge of color $i$ with endpoint bits $a,b$, its contribution to the generating function is
+\[
+ z_i^{\,\mathbf 1_{\{a\ne b\}}}
+    =\tfrac12\bigl((1+z_i)+(1-z_i)(-1)^{a+b}\bigr).
+\]
+Choose the sign term on edges in $H$ and the other term elsewhere. The product of signs uses each independent bit once for each incident edge in $H$. Its expectation is zero if any vertex has odd degree and one otherwise. Grouping the scalar factors by shift proves (2). For each $r$, summing coefficients in which every exponent is at least $r$ gives $\Pr(X\ge r)$. Summing over $r$ proves (3). \eop
+
+For $h=0$ one has $C_r(0)=\sum_{d=r}^n\binom nd$. For $h>0$, $Q_h(1)=0$, and hence
+\[
+ C_r(h)=-[z^{r-1}](1+z)^{n-h}(1-z)^{h-1}
+       =-\sum_{j=0}^{r-1}(-1)^j
+          {h-1\choose j}{n-h\choose r-1-j}.
+\]
+This removes the coefficient notation from (3). Binomial coefficients outside their usual range are zero.
+
+\newpage
+\sect{OVERLAPPING SCANS}{Which distances are independent?}
+
+For any subset of distinct shifts, form the graph consisting only of their edges. Its distances are jointly independent exactly when this graph is a forest. Indeed, for a forest the empty edge set is the only even subset, so (2) factors into the generating functions of independent $\operatorname{Binomial}(n,1/2)$ variables.
+
+Conversely, if the graph has $v$ vertices, $s$ edges and $c$ connected components, then
+\[
+ \Pr(\text{all selected distances are zero})=2^{c-v}.
+\]
+For all distances to vanish, the vertex bits must be constant on every connected component. Independence would give $2^{-s}$. A cycle makes $s>v-c$, so the probabilities differ. This argument counts isolated vertices consistently on both sides.
+
+In particular, two distinct shifts always give a forest. Around any candidate cycle the colors must alternate, since a vertex has at most one edge of a given color. Two successive edges then advance the $A$-index by the same nonzero displacement each time, precluding a closed cycle. In contrast, for $n\ge2$, any three consecutive shifts include a four-cycle. For shifts $0,1,2$ its vertices are $A_0,B_1,A_1,B_2$. This explains why treating pairwise independence as full independence changes the expected minimum.
+
+\head{Exact evaluation at fixed scan length}
+There is also an exact dynamic program. Keep the $k$ running distances and the $k-1$ text bits still needed by the next comparison. Initialize the distances at zero and the text suffix uniformly. In round $t$ choose a new pattern bit $A_t$ and a new text bit $B_{t+k-1}$. Compare $A_t$ with each bit of the resulting length-$k$ window. Add the mismatch indicators to their distances and discard the oldest text bit. After $n$ rounds, average the minimum of the final distances using their state probabilities. When $k=1$ the retained suffix is empty.
+
+The running distances take at most $(n+1)^k$ values. The direct program therefore costs at most $O(k\,2^{k-1}(n+1)^{k+1})$ arithmetic operations. It is polynomial in $n$ for fixed $k$. Formula (3) and this procedure apply to arbitrary $n,k$. Neither bound implies a short elementary expression or uniform polynomial-time evaluation in both variables.
+
+At $n=3,k=4$ the exact mean is $21/32$, while independently sampled windows would give $1329/2048$. Atallah, Jacquet and Szpankowski studied this statistic asymptotically and proved pairwise independence for a symmetric alphabet in their cyclic-text model. Earlier fixed-pattern calculations can also be averaged over all patterns. The result above supplies the full linear-scan law by an even-subgraph expansion. An independent checker compared the full transfer distribution and the formula's tails with exhaustive enumeration at all $1\le n\le4$, $1\le k\le5$~[5, 6].
+
+\newpage
+\sect{ANALYSIS AND GEOMETRY}{3. Prescribing parallel slice lengths}
+
+For $f\in C^1([0,1]^2)$ the length of the graph of $x\mapsto f(x,y)$ is
+\[
+ L_f(y)=\int_0^1\sqrt{1+f_x(x,y)^2}\,dx .
+\]
+In 2014 Arnaud Ch\'eritat wrote, \textquotedblleft Hence I do not expect $L$ to always be a $C^1$ function of $y$\textquotedblright~[7]. His expectation is correct. In fact the full possible range has a simple description.
+
+\strong{Theorem 3.} A function $L\colon[0,1]\to\R$ is a slice length $L_f$ if and only if it is continuous and $L\ge1$. One can in addition require $f(0,y)=f(1,y)=0$ for every $y$.
+
+\strong{Proof.} The integrand is continuous on a compact square and at least one, which proves necessity. To prove sufficiency, write $h=L-1$. We will allocate small oscillations in disjoint vertical bands. Their slopes supply the excess length, while their frequencies keep the transverse derivative small.
+
+\head{Decompose the excess}
+For every nonnegative continuous residual $r$ and $\epsilon>0$, there is a nonnegative smooth $g$ with $g^2\le r$ and $\|r-g^2\|_\infty<\epsilon$. Indeed, take a polynomial $u$ uniformly within $\delta$ of $\sqrt r$. Convolve $s\mapsto s_+$ with a nonnegative smooth unit-mass kernel supported in $(0,\delta)$ to get $\psi$. Then $s_+-\delta\le\psi(s)\le s_+$. Setting $g=\psi(u-\delta)$ gives $0\le\sqrt r-g\le3\delta$, and hence $0\le r-g^2\le6\delta\|\sqrt r\|_\infty$.
+
+Iterating gives smooth $g_j\ge0$ and residuals $r_j=h-\sum_{i=1}^j g_i^2$ with $0\le r_j\le4^{-j}$. Thus $h=\sum_jg_j^2$ uniformly and $\|g_j\|_\infty\le2^{-(j-1)}$ for $j\ge2$.
+
+\head{Calibrate the slope}
+Set $s(t)=\sin(2\pi t)$ and
+\[
+ \Phi(b)=\int_0^1\!\bigl(\sqrt{1+b^2s(t)^2}-1\bigr)\,dt,\qquad
+ \rho(b)=\operatorname{sgn}(b)\sqrt{\Phi(b)},\quad \rho(0)=0 .
+\]
+Rationalizing gives
+\[
+ \rho(b)=b\left(\int_0^1\frac{s(t)^2}{1+\sqrt{1+b^2s(t)^2}}\,dt\right)^{1/2}.
+\]
+The integral is positive and smooth in $b$, and $\rho'(0)=1/2$. For $b>0$ differentiating $\Phi$ shows that $\rho'(b)>0$. Oddness gives the same conclusion at negative $b$. Since $\Phi(b)\ge |b|\int_0^1|s(t)|\,dt-1$, $\rho$ is a smooth increasing bijection with smooth inverse on $\R$.
+
+\newpage
+\sect{PARALLEL SLICES}{Realizing the prescribed length}
+Put $w_j=2^{-j}$ and $a_j=1-2^{1-j}$. The consecutive bands $[a_j,a_j+w_j]$ cover $[0,1)$ with shared endpoints. Define the smooth amplitudes
+\[
+ b_j(y)=\rho^{-1}\!\left(g_j(y)/\sqrt{w_j}\right).
+\]
+Then $\|b_j\|_\infty\to0$. For each $j$ choose an integer $N_j\ge1$ satisfying $w_j\|b_j'\|_\infty/(\pi N_j)\le2^{-j}$. On band $j$ put
+\[
+ \theta_j(x)=\frac{2\pi N_j(x-a_j)}{w_j},\qquad
+ f(x,y)=\frac{w_jb_j(y)}{2\pi N_j}(1-\cos\theta_j(x)),
+\]
+and set $f(1,y)=0$. The function and both first partials vanish at each seam. Inside band $j$, $f_x=b_j\sin\theta_j$ and $|f_y|\le2^{-j}$, so both derivatives tend uniformly to zero at the accumulation edge $x=1$. There $f_y=0$ by the definition of $f$. The inequality $1-x\ge w_j$ on band $j$ gives
+\[
+ \frac{|f(x,y)|}{1-x}\le\frac{\|b_j\|_\infty}{\pi N_j}\longrightarrow0 ,
+\]
+so $f_x(1,y)=0$ as well. Thus $f$ is $C^1$ up to the boundary. Each band contains $N_j$ full oscillations. Its length contribution is $w_j(1+\Phi(b_j(y)))=w_j+g_j(y)^2$. Summing yields $L_f=1+h=L$, with the required endpoint values. \eop
+
+For example, $L(y)=1+|y-1/2|$ gives a transverse slice length with a corner. More generally, the theorem permits any continuous nowhere-differentiable length profile above one. The constructions and universal conclusions in this paper are proofs in prose. No claim of publication priority is made.
+
+\head{Sources}
+{\small\setlength{\parskip}{3pt}
+[1] A.\ G.\ Mitchell. \src{https://arxiv.org/abs/math/0407007}{The inverse rook problem on Ferrers boards} (2004).
+
+[2] Adam and B.\ McKay. \src{https://mathoverflow.net/questions/88547}{Bounds on numbers of matchings of given sizes in bipartite graphs}, MathOverflow (2012). \src{https://comp.anu.edu.au/people/brendan-mckay/}{ANU biography} records McKay's Melbourne PhD (1980).
+
+[3] M.\ Goemans. \src{https://math.mit.edu/~goemans/18433S07/matching-notes.pdf}{Lecture notes on bipartite matching}, Theorem 1. M.\ Lampis. \src{https://www.csc.kth.se/~mlampis/papers/metatheorems.pdf}{Algorithmic meta-theorems for restrictions of treewidth} (neighborhood types).
+
+[4] \src{https://mathoverflow.net/questions/128755}{Expected minimum Hamming distance with overlaps}, MathOverflow (2013), comment by A.\ Quas. \src{https://wrap.warwick.ac.uk/id/eprint/58569/}{Warwick PhD thesis} (1993).
+
+[5] M.\ Atallah, P.\ Jacquet and W.\ Szpankowski. \src{https://doi.org/10.1002/rsa.3240040206}{A probabilistic analysis of a pattern matching problem} (1993), Theorem 9 and Lemma 5.
+
+[6] M.\ R\'egnier and W.\ Szpankowski. \src{https://docs.lib.purdue.edu/cstech/1337/}{On the approximate pattern occurrences in a text} (1996 report). G.\ Navarro. \src{https://doi.org/10.1145/375360.375365}{A guided tour to approximate string matching} (2001).
+
+[7] A.\ Ch\'eritat. \src{https://mathoverflow.net/questions/184507}{Question on the lengths of transverse slices}, MathOverflow (2014). \src{https://www.math.univ-toulouse.fr/~cheritat/CV-court-2022.pdf}{Author's curriculum vitae} records his Paris-Sud doctorate (2001).
+}
+\end{document}
