@@ -1,0 +1,88 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,geometry,microtype,xcolor,fancyhdr,hyperref}
+\geometry{top=.82in,bottom=.9in,left=.88in,right=.88in}
+\definecolor{ink}{HTML}{17283A}\definecolor{teal}{HTML}{13676C}
+\hypersetup{colorlinks=true,urlcolor=teal,linkcolor=teal,pdftitle={Counting triangles with pairwise coprime edge weights},pdfauthor={LDJAI with OpenAI Codex}}
+\pagestyle{fancy}\fancyhf{}\fancyfoot[L]{\small\color{teal}LDJAI\quad/\quad Graph algorithms}\fancyfoot[R]{\small\color{teal}\thepage}\renewcommand{\headrulewidth}{0pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{.5em}
+\setlength{\abovedisplayskip}{.45em}\setlength{\belowdisplayskip}{.45em}
+\newcommand{\heading}[1]{\par\smallskip{\large\bfseries\color{ink}#1}\par\smallskip}
+\newcommand{\ptitle}[1]{{\Large\bfseries\color{ink}#1}\par\smallskip}
+\newcommand{\tr}{\operatorname{tr}}
+\begin{document}
+{\small\sffamily\color{teal}RESEARCH NOTE\hfill NOVEMBER 26, 2026}\par\medskip
+{\LARGE\bfseries\color{ink}Counting triangles with pairwise coprime edge weights}\par
+LDJAI, with OpenAI Codex\par
+In 2012 Jernej asked whether all triangles whose three edge weights are pairwise coprime can be counted in subcubic time. He expected a negative answer and specified in a comment that polynomially bounded weights would be a natural input model. We give an affirmative algorithm. An inclusion-exclusion sign at each vertex converts the arithmetic constraint into one sparse triangle count.
+\heading{Theorem}
+Let $G$ be a simple undirected graph on $n$ vertices. For each fixed $C$, suppose every edge has an integer weight in $[1,n^C]$. The number of triangles whose edge weights are pairwise coprime can be computed exactly and deterministically in $O(n^{2.95})$ time on a word RAM with $O(\log n)$-bit words. More precisely, Strassen's exponent $a=\log_2 7$ gives time
+\[
+ \boxed{\displaystyle n^{4a/(a+1)+o(1)}=n^{2.949401859\ldots+o(1)}.}
+\]
+The exponent saving is independent of $C$. The asymptotic constants may depend on $C$.
+\heading{Put a sign at each endpoint}
+First consider a graph with a finite set of labels $F_e$ on each edge. We want triangles for which the three sets are pairwise disjoint. In an auxiliary undirected graph make a copy $(v,S)$ of vertex $v$ for every subset $S$ of any label set incident to $v$. Give the copy sign $(-1)^{|S|}$. For every original edge $e=uv$, add the edges
+\[
+ (u,S)(v,T) \qquad\text{for all }S,T\subseteq F_e .
+\]
+Copies with identical keys are identified. Each auxiliary triangle projects to a triangle on three distinct original vertices, since the original graph has no loops. Weight the auxiliary triangle by the product of its three vertex signs.
+ 
+For a fixed original triangle with label sets $A,B,C$, the permitted subsets at its three vertices are chosen independently from $A\cap B$, $B\cap C$, and $C\cap A$. For any finite set $U$,
+\[
+ \sum_{S\subseteq U}(-1)^{|S|}=\mathbf1_{U=\varnothing}.
+\]
+If $U$ has a member, toggling that member pairs terms of opposite sign. Therefore the total contribution of the triangle is precisely
+\[
+ \mathbf1_{A\cap B=\varnothing}\,
+ \mathbf1_{B\cap C=\varnothing}\,
+ \mathbf1_{C\cap A=\varnothing}.
+\]
+Summing over original triangles proves the reduction. For example, weights $6,10,15$ have joint gcd one, but every pair shares a prime. The three endpoint tests give this triangle contribution zero.
+\newpage
+\ptitle{Why the construction stays subcubic}
+\heading{Recover the labels without a prime-factorization oracle}
+Let $W$ be the maximum weight, treating an edgeless input separately. Apply Bernstein's deterministic coprime-basis algorithm to the distinct weights. It computes pairwise coprime integers $p_j>1$ and each weight's factorization into powers of these integers, in essentially linear time in the combined input bit length. A basis element may be composite. Use $F_e=\{j:p_j\mid w_e\}$. The gcd of two weights is one exactly when their supports are disjoint. The weight one has empty support. Sorting and restoring repeated weights adds a polylogarithmic factor.
+ 
+If a weight uses $k$ distinct basis factors, their product is at least $2\cdot3\cdots(k+1)$. Hence $k=O(\log W/\log\log W)$ for large $W$. Write $m$ for the number of original edges and $s=\max_e|F_e|$. The auxiliary graph has exactly
+\[
+ M=\sum_e 4^{|F_e|}\le m4^s
+\]
+edges and at most $2M$ nonisolated vertices. For polynomial $W$, $s=o(\log n)$, so $M\le n^{2+o(1)}$. A subset can be keyed by the product of its selected basis elements. Coprimality makes these keys unique and each key fits in $O(\log W)$ bits. Generate its sign from the parity of the number selected. All lists, keys and edges can be built and sorted in $M\operatorname{polylog}n+n^{2+o(1)}$ time.
+\heading{Count signed triangles in the sparse graph}
+Let $h$ be a degree threshold. At each vertex of degree at most $h$, enumerate unordered pairs of neighbors and test adjacency by binary search. Count a found triangle only at its first low-degree vertex in a fixed ordering. This costs $O(Mh\log(2M))$ and counts every triangle with a low-degree endpoint exactly once, including its sign.
+ 
+At most $2M/h$ vertices remain above the threshold. On their induced graph let $H$ be the adjacency matrix and $D$ the diagonal matrix of signs. The remaining signed count is $\tr((DH)^3)/6$. Each of the six oriented traversals contributes the same sign. Compute $(DH)^2$ by fast matrix multiplication and take its trace pairing with $DH$. With any available ring multiplication exponent $a$, the high-degree cost is $O((M/h)^a)$ ring operations. This is the usual low-degree/high-degree sparse triangle argument of Alon, Yuster and Zwick, with signs carried through the sum.
+ 
+Choose $h=\lceil M^{(a-1)/(a+1)}\rceil$ (a constant-factor estimate suffices). The two costs balance at $M^{2a/(a+1)}$ up to polylogarithmic factors. For a wholly integral implementation use Strassen multiplication modulo a power of two larger than $12(2M+1)^3$. Recover the signed trace as a centered integer and divide by six in the integers. This keeps every arithmetic operand to $O(\log M)$ bits. Substitution of $M\le n^{2+o(1)}$ proves the theorem.\hfill$\square$
+ 
+\textbf{A network interpretation.} RFC 4202 permits a physical link to carry several shared-risk link group identifiers, for example a common fiber conduit. A three-router ring survives the loss of any one listed group exactly when the three link-label sets are pairwise disjoint. The same construction counts such rings directly from label lists. Its cost depends on the largest list through $4^s$.
+\newpage
+\ptitle{Where the weight-size assumption matters}
+\heading{An upper bound and a conditional obstruction}
+Let $b$ be the maximum binary weight length. Whenever $b=o(\log n\,\log\log n)$, the factorial bound on the preceding page still gives $s=o(\log n)$: a support of at least $\epsilon\log n$ elements already requires $\Omega_\epsilon(\log n\,\log\log n)$ bits. The upper exponent therefore persists, with polylogarithmic costs for multiword labels.
+ 
+At the next scale a uniform saving would refute the Strong Exponential Time Hypothesis (SETH). Consider three lists of $N$ Boolean vectors each, in dimension $d$. A triple is orthogonal if no coordinate equals one in all three vectors. Take one vertex per vector, keeping the lists as separate parts, and form a complete tripartite graph. With $p_1,\ldots,p_d$ the first $d$ primes, use
+\[
+ w_{ab}=\prod_{j:a_j=b_j=1}p_j,\qquad
+ w_{bc}=\prod_{j:c_j=1}p_j,\qquad w_{ca}=1.
+\]
+Every triangle corresponds to one indexed vector triple. Only $\gcd(w_{ab},w_{bc})$ can exceed one, and it does exactly when the three supports share a coordinate. Thus the desired count is the number of orthogonal triples. We may decide existence by testing whether the answer is positive.
+ 
+The graph has $n=3N$ vertices. Standard prime bounds give $p_d=O(d\log(2d))$, so each weight uses $O(d\log(2d))$ bits. For $d=c\log N$, the graph is constructed in $N^2\operatorname{polylog}N$ time. This is an exact count-preserving reduction.
+ 
+For clarity, the logarithmic-dimension three-list orthogonal-vectors hypothesis follows by splitting a sparsified SAT formula into three blocks of variables. Each partial assignment gives a vector with a one for each clause it does not satisfy. A triple of partial assignments satisfies the formula exactly when its vectors are orthogonal. Sparsification gives $O(v)$ clauses per formula on $v$ variables and at most $2^{\eta v}$ formulas, for any fixed $\eta>0$ and fixed clause width. A three-list algorithm with uniform saving $\delta>0$ would take $2^{(1-\delta/3+\eta)v+o(v)}$ time overall for $0<\delta<1$, contradicting SETH for sufficiently small $\eta$ and appropriate clause width.
+ 
+Consequently, under SETH, for each fixed $0<\delta<1$ there is a constant $K_\delta$ for which no deterministic $O(n^{3-\delta})$ algorithm handles all weights of bit length $b\le K_\delta\log n\log\log n$. The constant may depend on the saving. This conditional obstruction concerns longer encodings than the original polynomial-weight question.
+\heading{Sources and verification}
+\small
+\href{https://mathoverflow.net/q/104415}{Jernej, 2012, original question and three replies}. The replies discuss prime filters, fine-grained complexity and a joint-gcd sum. A search for the exact pairwise problem and equivalent label-set formulations located no prior full algorithm. The record supports the asker's own stated skepticism.
+ 
+\href{https://cr.yp.to/lineartime/dcba-20040404.pdf}{Bernstein, coprime bases (2005)}.
+\href{https://doi.org/10.1007/BF02523189}{Alon, Yuster and Zwick, sparse cycle algorithms (1997)}.
+\href{https://doi.org/10.1007/BF02165411}{Strassen, matrix multiplication (1969)}.
+\href{https://cseweb.ucsd.edu/~paturi/myPapers/pubs/ImpagliazzoPaturiZane_1998_focs.pdf}{Impagliazzo, Paturi and Zane, sparsification}.
+\href{https://www.rfc-editor.org/rfc/rfc4202#section-2.3}{RFC 4202, section 2.3}.
+ 
+Two Lean files verify the signed-triangle identity, the coprime-basis support test and the uniqueness of subset product keys. The Python reference passed all 15,625 four-vertex graphs whose edges are absent or weighted 1, 2, 3 or 6, plus 180 seeded graphs at five thresholds and 59 tests of the orthogonal-vectors reduction. The reference uses trial division for its small test inputs. The worst-case bound uses Bernstein's preprocessing. The running-time analysis and conditional lower bound are proved in this note. \href{https://lefttosolve.com/p/mo-104415}{Left to Solve problem mo-104415}.
+\end{document}
