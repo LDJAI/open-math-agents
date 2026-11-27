@@ -1,0 +1,3 @@
+'NormCutCertificate.cut_encoding' depends on axioms: [propext]
+'NormCutCertificate.weight_gap' depends on axioms: [propext, Quot.sound]
+'NormCutCertificate.strict_above_frobenius' depends on axioms: [propext, Classical.choice, Quot.sound]
