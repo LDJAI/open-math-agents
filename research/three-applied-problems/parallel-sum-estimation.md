@@ -31,6 +31,8 @@ Every denominator is positive, every $3+k_i t$ is positive, and at least one $k_
 
 Solve the one-dimensional strictly decreasing equation $G(t_*)=0$ on $[0,1]$. The maximum value is explicitly characterized by $D_{\max}=m(nt_*-\sum_i t_* /(1+k_i t_*))$. Interval bisection gives an error at most $2^{-s}$ in $t_*$ after $s$ steps. With rational inputs, all bisection comparisons can use exact rational arithmetic. Clearing the positive denominators gives a polynomial equation, with exactly one root in $(0,1)$. The constant-input case, excluded in the question, has $D\equiv0$.
 
+For example, take $b_1=1$ and $b_2=9$. Then $D(a)=32a^2/((a+1)(a+5)(a+9))$. Its maximizer is the unique positive root of $a^3-59a-90=0$, approximately $8.353109080374$, with $D_{\max}\approx1.030221457213$. The accompanying rational-arithmetic check brackets this root to width $3.1\times10^{-17}$ and tests the substitution and derivative identities on 105 nonconstant input lists.
+
 ## A consequence for state estimation
 
 For a scalar Gaussian observation with measurement-noise variance $a$ and prior variance $b$, the posterior variance is $ab/(a+b)$. If a batch has different known prior variances, but a summary replaces them by their mean, the estimated total posterior variance exceeds the sum computed from the individual updates by exactly $D(a)$. The theorem identifies a unique measurement-noise variance where this aggregation error is largest. The same argument works for arbitrary positive finite weights: use the weighted mean and weight every summand, including each summand of $G'$. [Scalar Kalman update equations, University of Michigan](https://www.eecs.umich.edu/courses/eng100/lec1/kalman.html)
