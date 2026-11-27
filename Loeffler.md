@@ -8,7 +8,7 @@ David Loeffler asked on January 17, 2013 whether every maximal minor of the matr
 \[
  F=\mathbb Q(\sqrt2,\sqrt3),\qquad a=\sqrt2+\sqrt3-1,\qquad K=F(\sqrt a).
 \]
-For every prime \(p\) and every choice of fundamental units of \(K\), at least six of the seventy maximal minors of its logarithm matrix vanish.
+For every prime \(p\) and every choice of fundamental units of \(K\), exactly six of the seventy maximal minors of its logarithm matrix vanish. The short disproof uses only their vanishing.
 
 ## Proof
 
@@ -24,6 +24,24 @@ Consequently the restriction already has a nonzero kernel. In *any* basis of \(U
 
 The mechanism applies to any tower \(F\subset K\). If rows in a chosen maximal minor restrict to fewer distinct embeddings of \(F\) than \(\operatorname{rank} U_F\), that minor vanishes identically.
 
+## Exactly six of the seventy minors vanish
+
+For the explicit biquadratic example the entire pattern can be determined for **every** prime \(p\). This refinement is a mathematical proof in the note and is separate from the all-minors disproof being formalized.
+
+Use the three subfield units
+\[
+ \epsilon_2=1+\sqrt2,\qquad \epsilon_3=2+\sqrt3,\qquad \epsilon_6=5+2\sqrt6.
+\]
+Each has norm \(\pm1\) in its own real quadratic field. The p-adic log of a nontorsion algebraic unit is nonzero under every embedding: the image belongs to a finite extension of \(\mathbb Q_p\), where the kernel of log on local units is precisely the roots of unity. In particular the three log columns, restricted to the four embeddings of \(F\), are the three nontrivial character columns of the Klein four-group multiplied by nonzero scalars. This follows by conjugating each quadratic unit to its inverse times a sign. Removing any one of the four rows from the resulting sign matrix gives a \(3\times3\) determinant of absolute value four. These three units thus generate a subgroup of full rank in \(U_F\). [Local logarithm kernel, Sharifi, Chapter 1](https://www.math.ucla.edu/~sharifi/notes/iwasawa-ch01.html)
+
+Let \(\tau\) be the nontrivial automorphism of \(K/F\). Choose a unit \(v\) outside the rational span of the subfield units and put \(\eta=v/\tau(v)\). If \(\eta\) were torsion, a positive power of \(v\) would be fixed by \(\tau\), contrary to the choice of \(v\). Thus \(\eta\) is nontorsion with \(\tau(\eta)=\eta^{-1}\). Its class is independent of the subfield units, since a nonzero power in \(F\) would equal its own inverse. The four units just chosen form a basis after tensoring with \(\mathbb Q\). Replacing a fundamental unit basis by them therefore multiplies every maximal minor by the same nonzero rational determinant.
+
+* **Two distinct restrictions to \(F\)** give six minors. The two distinct character rows are independent, so the subfield columns have rank two. Within each doubled pair, the values of \(\log(\eta)\) are opposite and nonzero. The fourth column raises the rank to exactly three.
+* **Three distinct restrictions to \(F\)** give 48 minors. The three different character rows have rank three. On the doubled pair only the fourth column takes different values, so this column raises the rank to four. In particular classical Leopoldt holds for this particular \(K\) at every prime.
+* **Four distinct restrictions to \(F\)** give 16 minors. The three character columns span the hyperplane of coordinate sum zero. The fourth column's coordinate sum is the log of \(P=\prod_i\sigma_i(\eta)\). To see that \(P\) is nontorsion, work in the normal closure, containing the four square roots of the conjugates \(a_i\) of \(a\). Their classes in \(F^\times/(F^\times)^2\) are independent. Indeed, their sign vectors over the four real embeddings form the matrix \(I+J\) over \(\mathbb F_2\), with \(J\) all ones. This matrix squares to the identity, and any square in \(F^\times\) has zero sign vector. The elementary multiquadratic extension theorem therefore supplies an automorphism over \(F\) that reverses exactly one chosen square root. It fixes the other three factors of \(P\) and replaces the remaining one by its inverse. If \(P\) were torsion, dividing its transform by \(P\) would show that the square of that factor was torsion, contradicting the choice of \(\eta\). Consequently the coordinate sum is nonzero, and the fourth column completes a basis.
+
+This accounts for six singular maximal minors, all of rank three, and 64 nonsingular maximal minors. At the completely split prime below, each of the six exceptional choices of four primes consequently has local-unit quotient rank exactly one.
+
 ## A completely split prime
 
 The same example applies even if one insists on complete splitting. Take \(p=1609\). Modulo this prime, \(275^2=2\) and \(244^2=3\). The four residues of \(\pm275\pm244-1\), in sign order \(++,+-,-+,--\), are \(518,30,1577,1089\). Their respective square roots modulo \(p\) are \(549,664,722,33\). All the roots are nonzero. Hensel’s lemma first lifts the choices for both square roots defining \(F\), and then lifts both square roots of each resulting value of \(a\). This gives eight embeddings of the degree-eight field \(K\) into \(\mathbb Q_{1609}\), establishing complete splitting.
@@ -38,4 +56,10 @@ The six comments on the question do not give a p-adic counterexample. Searches o
 
 The same mechanism admits a model with an elementary irreducibility certificate for each defining polynomial. Let \(f(X)=X(X+2)(X+4)(X+6)-2\), let \(F=\mathbb Q[\alpha]\) for a root of \(f\), and set \(K=\mathbb Q[\beta]\) for a root of \(f(X^2)\), embedding \(F\) by \(\alpha\mapsto\beta^2\). Both polynomials are Eisenstein at two. The four disjoint intervals \((-7,-6),(-6,-3),(-3,-2),(0,1)\) each contain a root of \(f\) by the intermediate value theorem. Thus \(F\) is totally real, only one of its four embeddings makes \(\alpha\) positive, and \(K\) again has signature \((2,3)\). The same proof applies. The complete-splitting calculation at 1609 above concerns the first field.
 
-The proof above is in ordinary mathematics. The public note may be read and assessed independently of Lean. The counterexample uses classical algebraic number theory and a small linear-algebra obstruction. The prime 1609 is included to give a concrete instance of complete splitting. The all-primes argument does not rely on that particular prime.
+## Checked Lean components
+
+`LoefflerMinor.lean` was verified by Lean 4.33.1. It proves the signs of the four radical conjugates and the singularity of the selected minor over any commutative ring when any three chosen columns have both row equalities. It also proves the corresponding singularity after any change of unit basis with nonzero determinant over an integral domain. The axiom reports for the three public conclusions contain only `propext`, `Classical.choice`, and `Quot.sound`. The combined solution uses the second, Eisenstein tower, constructs the field, its real embedding, its unit basis and four selected p-adic embeddings, and proves the negation of the full proposed Left to Solve statement with its concrete p-adic logarithm. Lean 4.33.1 checked `OMA.disproof`, with exactly `propext`, `Classical.choice`, and `Quot.sound`. The construction works at any prime and the final disproof specializes to 2. The exact count of six for the first, biquadratic tower is a separate proof in prose here.
+
+[Lean disproof](LoefflerDisproof.lean) · [Standalone statement](S_mo_119202.lean) · [Reproduction bundle](loeffler-sources.zip)
+
+LDJAI submitted the official catalogue statement with the public proof linked in [statement PR #2614](https://github.com/GuillaumeBAUD-coder/open-math-agents/pull/2614). Statement review precedes proof admission.
