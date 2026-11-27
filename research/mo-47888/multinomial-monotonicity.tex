@@ -1,0 +1,83 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,geometry,xcolor,hyperref}
+\geometry{left=.94in,right=.94in,top=.77in,bottom=.83in}
+\definecolor{ink}{HTML}{19343A}
+\definecolor{teal}{HTML}{126267}
+\hypersetup{colorlinks=true,urlcolor=teal,linkcolor=teal,pdftitle={When does multinomial averaging preserve monotonicity?},pdfauthor={LDJAI with OpenAI Codex}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus .5pt}
+\setlength{\abovedisplayskip}{6pt plus 1pt minus 1pt}
+\setlength{\belowdisplayskip}{6pt plus 1pt minus 1pt}
+\newcommand{\E}{\mathbb E}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\head}[1]{\par\vspace{5pt}{\large\bfseries\color{ink}#1}\par\vspace{1pt}}
+\newcommand{\subhead}[1]{{\bfseries\color{ink}#1}\quad}
+\newcommand{\gapF}{\mathcal D_n}
+\begin{document}
+{\small\sffamily\bfseries\color{teal} PROBABILITY}\hfill{\small November 2026}
+
+{\LARGE\bfseries\color{ink} When does multinomial averaging\\[2pt] preserve monotonicity?\par}
+{\small LDJAI with OpenAI Codex}
+
+Let $p$ lie in the probability simplex $\Delta_{k-1}$, and let $X_p$ count the outcomes of $n$ independent categorical draws with probabilities $p$. For a field $f\colon\Z^k\to\R^k$, put $G_n(p)=\E[f(X_p)]$. In 2010, daizhuo asked whether monotonicity of $f$ in the sense of
+\[
+ (x-y)\cdot(f(x)-f(y))\ge0 \qquad(x,y\in\Z^k)
+\]
+implies the same inequality for $G_n$ on the simplex. Write
+$\gapF(p,q)=(p-q)\cdot(G_n(p)-G_n(q))$.
+
+\subhead{Theorem.} For every $n\ge1$, multinomial averaging preserves monotonicity of every field on $\Z^k$ if and only if $k\le2$. For $k\ge3$, a single field and a fixed pair of probability vectors violate the inequality for every $n\ge1$.
+
+\head{Three categories suffice to reverse the sign}
+For $k=3$, take $a=(-1,0,1)$ and $f(x)=a\,(a\cdot x)_+$, where $t_+=\max(t,0)$. For any $x,y$, the monotonicity inequality reduces to
+\[
+ (a\cdot x-a\cdot y)\big((a\cdot x)_+-(a\cdot y)_+\big)\ge0,
+\]
+since the positive part is increasing. Compare $p=(0,1,0)$ with $q=(3/4,0,1/4)$. Under $p$ the score $a\cdot X_p$ is zero. Under $q$ it equals $n$ whenever every draw selects category three, an event with probability $4^{-n}$. Consequently
+\[
+ G_n(p)=0,\qquad G_n(q)=a\,\E[(a\cdot X_q)_+],\qquad
+ \gapF(p,q)=-\tfrac12\E[(a\cdot X_q)_+]\le-\frac{n}{2\cdot4^n}<0.
+\]
+The mean score drops from $0$ to $-n/2$, yet the expected positive part increases. For $k>3$, append zeros to $a,p,q$. The same monotone field formula and the same inequality hold.
+
+\head{Two categories reduce to one ordered count}
+At $k=2$, write $p_t=(t,1-t)$ and $z_j=(j,n-j)$. The scalar contrast $h(j)=f_1(z_j)-f_2(z_j)$ is nondecreasing in $j$, by applying monotonicity to $z_{j+1},z_j$ whose difference is $(1,-1)$. On one probability space, let
+$J_t=\sum_{i=1}^n\mathbf{1}_{\{U_i\le t\}}$ for independent $U_i$ uniform on $[0,1]$. Then $z_{J_t}$ has the required multinomial law, and $J_t$ increases with $t$ for every realization. It follows that
+\[
+ \gapF(p_t,p_s)=(t-s)\big(\E h(J_t)-\E h(J_s)\big)\ge0.
+\]
+For $k=1$ the simplex has one point, completing the proof.
+
+\newpage
+\head{A smooth, strongly monotone counterexample}
+The sign reversal persists for the real-analytic gradient of a strongly convex potential. Put $a=(0,1,2)$, $p=(3/5,0,2/5)$, $q=(0,1,0)$, and define on $\R^3$
+\[
+ F(x)=a\,2^{a\cdot x}+\frac{x}{76}
+ =\nabla\!\left(\frac{2^{a\cdot x}}{\log 2}+\frac{\lVert x\rVert_2^2}{152}\right).
+\]
+The Jacobian $DF(x)=(\log 2)2^{a\cdot x}aa^{\mathsf T}+I/76$ has all eigenvalues at least $1/76$ and all entries nonnegative. Thus $F$ is $1/76$-strongly monotone, is nondecreasing in every coordinate, and takes componentwise nonnegative values on the nonnegative orthant. Restricting $F$ to $\Z^3$ gives a field of the type in the conjecture.
+
+Let $z(r)=\sum_i r_i2^{a_i}$. The independence of the draws gives $\E[2^{a\cdot X_r}]=z(r)^n$, while $\E[X_r]=nr$. For $G_n(r)=\E[F(X_r)]$ this yields
+\[
+ G_n(r)=a\,z(r)^n+\frac{nr}{76}.
+\]
+Here $z(p)=11/5$, $z(q)=2$, $(p-q)\cdot a=-1/5$ and $\lVert p-q\rVert_2^2=38/25$. The difference-of-powers identity gives $(11/5)^n-2^n\ge n/5$, so
+\[
+ \gapF(p,q)=-\frac15\big((11/5)^n-2^n\big)+\frac{n}{50}
+ \ \le\ -\frac{n}{50}\qquad(n\ge1).
+\]
+The violation survives with strictly positive probabilities, using the same pair for all $n$. Fix $0<\varepsilon<1$ and any interior probability vector $u$. Replace $p,q$ by $p'=(1-\varepsilon)p+\varepsilon u$ and $q'=(1-\varepsilon)q+\varepsilon u$. Then $z(p')-z(q')=(1-\varepsilon)/5$ with both bases at least one. Hence $z(p')^n-z(q')^n\ge n(1-\varepsilon)/5$. Both the resulting negative upper bound on the exponential contribution and the positive quadratic contribution scale by $(1-\varepsilon)^2$, giving
+\[
+ \gapF(p',q')\le-\frac{n(1-\varepsilon)^2}{50}.
+\]
+
+In a model that evaluates a monotone cost field on sampled counts, its expected cost can therefore violate monotonicity as a function of the sampling probabilities.
+
+\head{Two cases suggested in the original question}
+For affine $f(x)=Ax+b$, one has $G_n(p)=nAp+b$. Lattice monotonicity gives $v^{\mathsf T}Av\ge0$ first for integral $v$, then for rational $v$ by scaling and for real $v$ by continuity. Hence $\gapF(p,q)\ge0$. If $f_i(x)=h_i(x_i)$ with each $h_i$ nondecreasing, $X_{p,i}$ is binomial with parameter $p_i$. The uniform coupling on page one shows that $\E[h_i(X_{p,i})]$ increases with $p_i$. Every term in $\gapF$ is then nonnegative.
+
+\head{Source and verification}
+\small The conjecture is from daizhuo, \emph{Expectation, multinomial distribution, and monotonicity (A conjecture)}, MathOverflow, December 1, 2010, \href{https://mathoverflow.net/questions/47888/expectation-multinomial-distribution-and-monotonicity-a-conjecture}{question 47888}. The \href{https://lefttosolve.com/p/mo-47888}{Left to Solve catalog entry} is \texttt{mo-47888}. Prepared with OpenAI Codex at LDJAI's request. The companion Lean 4 files verify the counterexample for all $n\ge1$ and the full category classification. The smooth example is proved above.
+\end{document}
