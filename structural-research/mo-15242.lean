@@ -107,7 +107,6 @@ end GridCounter
 namespace GridCounter
 
 
-/-- Exact numbers of connected spanning subgraphs in the two orientations. -/
 set_option maxRecDepth 100000 in
 set_option maxHeartbeats 0 in
 theorem nineteen_eighteen : count 4 2 4 19 18 = 3780 := by decide +kernel
