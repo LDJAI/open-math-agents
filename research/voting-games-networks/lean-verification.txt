@@ -1,0 +1,36 @@
+Lean 4.33.1
+mathlib 0df444a360eaa60ab8c11dca51a86af692955474
+Clean build and axiom audit: exit status 0; 15 named research theorems audited.
+
+Checking OrderedTrails
+'OrderedTrails.repair_cycle_routing' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OrderedTrails.route_of_span_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OrderedCycle.load_span' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OrderedCycle.route_ordered_ring' depends on axioms: [propext, Classical.choice, Quot.sound]
+Checking LiarGame
+Checking Compression
+'ShoreCompression.rematch_preserves_connectivity' depends on axioms: [propext, Classical.choice, Quot.sound]
+Checking LiarGameExtension
+Checking OddCuts
+'OrderedTrails.OddCuts.odd_min_cuts_cannot_cross' depends on axioms: [propext, Quot.sound]
+Checking Tournament
+Checking PaleyCertificate
+Checking LiarGameHomogeneous
+Checking LiarGameMasks
+Checking LiarGameOccupancy
+Checking LiarGamePennies
+'TournamentResearch.every_pair_extends' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TournamentResearch.vertex_deletion' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TournamentResearch.triangle_through_edge' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PaleyCertificate.five_dominate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PaleyCertificate.four_do_not_extend' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LiarGame.even_split_minimizes_worst_volume' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LiarGameExtension.fill_unused_leaves' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LiarGameExtension.any_extension_embeds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LiarGameHomogeneous.same_sign_halving' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LiarGameOccupancy.with_pennies_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LiarGamePennies.homogeneous_halving_with_pennies' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LiarGamePennies.restore_initial_pennies' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OrderedCycle.route_ordered_ring' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OrderedTrails.OddCuts.odd_min_cuts_cannot_cross' depends on axioms: [propext, Quot.sound]
+'ShoreCompression.rematch_preserves_connectivity' depends on axioms: [propext, Classical.choice, Quot.sound]

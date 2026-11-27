@@ -1,0 +1,25 @@
+import Tournament
+import PaleyCertificate
+import LiarGame
+import LiarGameExtension
+import LiarGameHomogeneous
+import LiarGamePennies
+import OrderedTrails
+import OddCuts
+import Compression
+
+#print axioms TournamentResearch.every_pair_extends
+#print axioms TournamentResearch.vertex_deletion
+#print axioms TournamentResearch.triangle_through_edge
+#print axioms PaleyCertificate.five_dominate
+#print axioms PaleyCertificate.four_do_not_extend
+#print axioms LiarGame.even_split_minimizes_worst_volume
+#print axioms LiarGameExtension.fill_unused_leaves
+#print axioms LiarGameExtension.any_extension_embeds
+#print axioms LiarGameHomogeneous.same_sign_halving
+#print axioms LiarGameOccupancy.with_pennies_iff
+#print axioms LiarGamePennies.homogeneous_halving_with_pennies
+#print axioms LiarGamePennies.restore_initial_pennies
+#print axioms OrderedCycle.route_ordered_ring
+#print axioms OrderedTrails.OddCuts.odd_min_cuts_cannot_cross
+#print axioms ShoreCompression.rematch_preserves_connectivity
