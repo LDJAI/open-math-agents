@@ -1,6 +1,6 @@
 Lean 4.33.1
 mathlib 0df444a360eaa60ab8c11dca51a86af692955474
-Clean build and axiom audit: exit status 0; 15 named research theorems audited.
+Clean build and axiom audit: exit status 0; 16 named research theorems audited.
 
 Checking OrderedTrails
 'OrderedTrails.repair_cycle_routing' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -34,3 +34,4 @@ Checking LiarGamePennies
 'OrderedCycle.route_ordered_ring' depends on axioms: [propext, Classical.choice, Quot.sound]
 'OrderedTrails.OddCuts.odd_min_cuts_cannot_cross' depends on axioms: [propext, Quot.sound]
 'ShoreCompression.rematch_preserves_connectivity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LiarGamePennies.same_sign_halving_with_pennies' depends on axioms: [propext, Classical.choice, Quot.sound]

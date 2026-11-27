@@ -23,3 +23,4 @@ import Compression
 #print axioms OrderedCycle.route_ordered_ring
 #print axioms OrderedTrails.OddCuts.odd_min_cuts_cannot_cross
 #print axioms ShoreCompression.rematch_preserves_connectivity
+#print axioms LiarGamePennies.same_sign_halving_with_pennies

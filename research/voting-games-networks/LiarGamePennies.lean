@@ -122,4 +122,20 @@ theorem restore_initial_pennies {C : Type*} [Fintype C]
     omega
   omega
 
+/-- A question which beats balancing must select above half the class in
+at least one positive lie allowance and below half in another. This holds
+regardless of how many of the original zero-lie candidates it selects. -/
+theorem same_sign_halving_with_pennies {C : Type*} [Fintype C]
+    (h v l : ℕ) (r u k : C → ℕ) (hk : ∀ i, k i ≤ 2*u i) (hl : l ≤ 2*v)
+    (yes : Solvable h (extendBudget (F := Fin l)
+       (childBudget (size := fun i => 2*u i) r k)))
+    (no : Solvable h (extendBudget (F := Fin (2*v-l))
+       (childBudget (size := fun i => 2*u i) r (fun i => 2*u i-k i))))
+    (hSign : (∀ i, u i ≤ k i) ∨ (∀ i, k i ≤ u i)) :
+    Solvable h (extendBudget (F := Fin v)
+       (childBudget (size := fun i => 2*u i) r u)) := by
+  apply restore_initial_pennies h v l r u k hk hl _ yes no
+  exact same_sign_halving h r u k ((with_pennies_iff _ _).mp yes).1
+    ((with_pennies_iff _ _).mp no).1 hSign
+
 end LiarGamePennies
