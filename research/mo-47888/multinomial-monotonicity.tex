@@ -80,4 +80,35 @@ For affine $f(x)=Ax+b$, one has $G_n(p)=nAp+b$. Lattice monotonicity gives $v^{\
 
 \head{Source and verification}
 \small The conjecture is from daizhuo, \emph{Expectation, multinomial distribution, and monotonicity (A conjecture)}, MathOverflow, December 1, 2010, \href{https://mathoverflow.net/questions/47888/expectation-multinomial-distribution-and-monotonicity-a-conjecture}{question 47888}. The \href{https://lefttosolve.com/p/mo-47888}{Left to Solve catalog entry} is \texttt{mo-47888}. Prepared with OpenAI Codex at LDJAI's request. The companion Lean 4 files verify the counterexample for all $n\ge1$ and the full category classification. The smooth example is proved above.
+\newpage
+\normalsize
+{\small\sffamily\bfseries\color{teal} APPLICATION TO ROUTE CHOICE}
+\head{Which linear load measurements preserve monotonicity?}
+Let $A$ be a real $m\times k$ matrix. For route or activity counts $x$, the vector $Ax$ records $m$ resource loads. Assign each load a nondecreasing scalar cost $c_e\colon\R\to\R$ and put $f(x)=A^{\mathsf T}c(Ax)$, with $c(v)_e=c_e(v_e)$. This field is monotone because its defining inner product is a sum of one-variable monotonicity inequalities.
+
+\subhead{Theorem.} For any fixed $n\ge1$, the expected field $G_n(p)=\E[f(X_p)]$ is monotone for every choice of the $c_e$ if and only if each row of $A$ has at most two distinct entries.
+
+\subhead{Sufficiency.} For a row $u$ with entries in $\{a,b\}$, $a<b$, let $t_p=\sum_{i:u_i=b}p_i$. Each draw contributes either $a$ or $b$, so
+\[
+ u\cdot X_p\ \overset{d}{=}\ na+(b-a)J_{t_p},\qquad J_t\sim\mathrm{Binomial}(n,t).
+\]
+The expected cost $H(t)=\E[c_e(na+(b-a)J_t)]$ is nondecreasing by the coupling on page one. Since $u\cdot(p-q)=(b-a)(t_p-t_q)$, the contribution of this row to $\gapF(p,q)$ equals $(b-a)(t_p-t_q)(H(t_p)-H(t_q))\ge0$. A constant row contributes zero. Summing over rows proves sufficiency, even for correlated resource loads.
+
+\subhead{Necessity.} Suppose one row $u$ takes values $l<m_0<h$. Set its cost to $\exp$ and all others to zero. Let $q$ select the middle value $m_0$ with certainty. Choose an endpoint mixture $p_0$ with mean $m_0$. Strict convexity gives $\E_{p_0}[e^u]>e^{m_0}$ for one draw. Move a little mass from $h$ to $l$ to obtain $p$. Its mean load per draw falls below $m_0$ while its mean exponential stays above $e^{m_0}$. With $v_i=e^{u_i}$, independence yields
+\[
+ \gapF(p,q)=\underbrace{u\cdot(p-q)}_{<0}
+      \underbrace{\big((v\cdot p)^n-(v\cdot q)^n\big)}_{>0}<0.
+\]
+Mixing $p,q$ with the same interior distribution in the same proportion preserves both strict orders. Thus one strictly positive pair witnesses failure for every $n\ge1$.
+
+\head{Expected route costs on a network}
+Let $A_{ei}$ indicate whether route $i$ traverses link $e$. A link with use probability $(Ap)_e$ then has load $\mathrm{Binomial}(n,(Ap)_e)$. Write $h_e(t)=\E[c_e(J_t)]$. For travelers who choose routes independently, the expected vector of additive route costs is $A^{\mathsf T}h(Ap)$, and
+\[
+ (p-q)\cdot(G_n(p)-G_n(q))=
+ \sum_e\big((Ap)_e-(Aq)_e\big)\big(h_e((Ap)_e)-h_e((Aq)_e)\big)\ge0 .
+\]
+For example, if routes 1 and 2 share a link of cost $j^2$ at load $j\ge0$ and route 3 bypasses it, the shared link adds $(x_1+x_2)^2$ to the costs of both routes. Its expected contribution to each is $nt(1-t)+n^2t^2$ for $t=p_1+p_2$. The route costs can therefore be nonlinear and depend on counts of other routes while retaining expected monotonicity.
+
+{\small\textbf{Traffic-model motivation.} Daizhuo Chen, \emph{Modeling travel time uncertainty in traffic networks}, S.M. thesis, Massachusetts Institute of Technology, 2010.
+\href{https://dspace.mit.edu/handle/1721.1/61889}{MIT thesis record}. The real-matrix criterion above is proved directly on this page.}
 \end{document}

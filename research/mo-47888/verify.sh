@@ -10,7 +10,7 @@ set -euo pipefail
 #   bash /path/to/verify.sh /path/to/formal-conjectures
 # The pinned manifest selects Lean 4.33.1 and mathlib 0df444a360eaa60ab8c11dca51a86af692955474.
 # Compilation uses fresh temporary output. The conjecture statement deliberately
-# contains a placeholder. The disproof and classification must be independent of it.
+# contains a placeholder. The theorems audited below must be independent of it.
 
 sources=$(cd -- "$(dirname -- "$0")" && pwd)
 project=$(cd -- "${1:?Pass the path to the pinned formal-conjectures checkout}" && pwd)
@@ -25,12 +25,16 @@ trap 'rm -rf -- "$build"' EXIT
 mkdir -p "$build/OMAStatements" "$build/OMAProofs"
 cp "$sources/Statement.lean" "$build/OMAStatements/S_mo_47888.lean"
 cp "$sources/Disproof.lean" "$build/OMAProofs/Multinomial.lean"
-cp "$sources/Binary.lean" "$sources/Classification.lean" "$build"
+cp "$sources/Binary.lean" "$sources/Classification.lean" "$sources/Routing.lean" "$build"
 cat > "$build/Audit.lean" <<'LEAN'
 import Classification
+import Routing
 #print axioms OMA.disproof
 #print axioms OMA.MultinomialWitness.monotonicity_fails_every_trial_count
 #print axioms MultinomialClassification.classification
+#print axioms MultinomialRouting.average_load
+#print axioms MultinomialRouting.link_cost_monotone
+#print axioms MultinomialRouting.routing_monotone
 LEAN
 
 cd "$project"
@@ -44,8 +48,17 @@ lean -o OMAStatements/S_mo_47888.olean OMAStatements/S_mo_47888.lean
 lean -o OMAProofs/Multinomial.olean OMAProofs/Multinomial.lean
 lean -o Binary.olean Binary.lean
 lean -o Classification.olean Classification.lean
+lean -o Routing.olean Routing.lean
 lean Audit.lean | tee Audit.log
-for theorem in OMA.disproof OMA.MultinomialWitness.monotonicity_fails_every_trial_count MultinomialClassification.classification; do
+theorems=(
+    OMA.disproof
+    OMA.MultinomialWitness.monotonicity_fails_every_trial_count
+    MultinomialClassification.classification
+    MultinomialRouting.average_load
+    MultinomialRouting.link_cost_monotone
+    MultinomialRouting.routing_monotone
+)
+for theorem in "${theorems[@]}"; do
     grep -Fxq "'$theorem' depends on axioms: [propext, Classical.choice, Quot.sound]" Audit.log
 done
 BUILD
