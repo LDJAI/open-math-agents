@@ -1,0 +1,97 @@
+\documentclass[12pt]{article}
+\usepackage{fontspec}
+\usepackage{amsmath,amssymb,xcolor,fancyhdr}
+\usepackage[margin=.84in,top=.83in,bottom=.8in]{geometry}
+\usepackage[colorlinks=true,urlcolor=teal]{hyperref}
+\hypersetup{pdftitle={Three open problems and what can be proved},pdfauthor={LDJAI research notes with OpenAI Codex}}
+\setlength\parindent{0pt}\setlength\parskip{6pt}
+\definecolor{ink}{HTML}{14282D}\definecolor{teal}{HTML}{11615D}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small\sffamily LDJAI / Mathematical research notes}\fancyhead[R]{\small\sffamily November 26, 2026}\fancyfoot[R]{\small\sffamily\thepage}
+\setlength\headheight{15pt}\renewcommand\headrulewidth{.25pt}
+\newcommand{\heading}[1]{\par{\LARGE\sffamily\bfseries\color{ink}#1\par}\vspace{3pt}}
+\newcommand{\subh}[1]{\par\vspace{3pt}{\large\sffamily\bfseries\color{teal}#1\par}}
+\newcommand{\src}[2]{\href{#1}{#2}}\newcommand{\diag}{\operatorname{diag}}
+\begin{document}
+\heading{Three open problems and what can be proved}
+{\large An operator-algebra impossibility argument and two verified limits on proof strategies\par}
+
+\subh{Henriques's endomorphism question \hfill 2010}
+Can a transformation $\rho$ of a type III von Neumann factor be irreducible while its square splits as the direct sum of two copies of itself? Andr\'e Henriques, who earned his PhD at MIT, wrote “I suspect that the following is also impossible.” In 2011 Ulrich Pennig excluded the case of finite statistical dimension. Henriques explicitly identified infinite statistical dimension as the remaining case. This dimension measures the endomorphism. The underlying factor is infinite-dimensional throughout. \src{https://mathoverflow.net/questions/47071/endomorphism-of-type-iii-factor-can-it-satisfy-phi-circ-phi-phi-oplus-phi}{Original question and exchange} $\cdot$ \src{https://lefttosolve.com/p/mo-47071}{Left To Solve} $\cdot$ \src{https://webspace.science.uu.nl/~corne102/ugc/UGC-scientific_content}{Doctoral credential}
+
+\textbf{Proposed answer.} The splitting itself forces finite statistical dimension. Averaging over its two summands produces a projection. Its range gives a subfactor of finite index that controls the index of $\rho(M)\subset M$. Pennig's contradiction then applies. Pages 2 and 3 give the argument, which supports Henriques's prediction. Priority remains provisional.
+
+\subh{Collatz convergence \hfill By 1952}
+John H. Conway wrote in the 2012 postscript to his 2013 paper that “the Collatz $3n+1$ Conjecture is itself very likely to be unsettleable.” He revised the weaker assessment at the start of that paper. We tested whether an integer-valued rank can force descent after at most a fixed number of ordinary Collatz steps. Lean verifies an obstruction at arbitrarily large starting values for a whole class of ranks. \src{https://gwern.net/doc/cs/computable/2013-conway.pdf}{Conway, pp.~196--197} $\cdot$ \src{https://www.cai.cam.ac.uk/news/professor-john-conway-1937-2020}{Cambridge credential} $\cdot$ \src{https://www.cecm.sfu.ca/organics/papers/lagarias/}{Lagarias on origins} $\cdot$ \src{https://lefttosolve.com/p/CollatzConjecture.collatz_conjecture}{Left To Solve}
+
+\subh{P versus NP \hfill 1971}
+Francisco Ant\^onio D\'oria, who earned a physics doctorate in 1977, predicted “both are independent” after discussing the consistency of both $\mathsf P=\mathsf{NP}$ and $\mathsf P\ne\mathsf{NP}$ with ZFC. He anticipated a separation using stronger axioms. We tested whether growth in the number of distinct residual Boolean functions forces long decision times. A Lean-checked example shows exactly where the inference fails. \src{https://courses.cs.vt.edu/~cs4104/heath/Spring2006/Resources/PversusNPpoll.pdf}{Gasarch's 2002 poll, respondent 10} $\cdot$ \src{https://www.iea.usp.br/pessoas/pasta-pessoaf/francisco-antonio-doria}{University of S\~ao Paulo} $\cdot$ \src{https://lefttosolve.com/p/ComplexityTheory.P_ne_NP}{Left To Solve}
+
+The latter two quotations address provability. Henriques's quotation addresses existence. The accompanying files contain machine-checked component results. Full Lean verification of the catalogue targets remains open.
+\newpage
+\heading{The averaging operator}
+Let $M$ be a complex type III factor and $\rho:M\to M$ a normal unital $*$-endomorphism with $N=\rho(M)$ and $N'\cap M=\mathbb C1$. Normality makes its kernel a weakly closed ideal, hence $\rho$ is injective. Assume the proposed splitting exists. Absorbing its conjugating unitary into the two isometries yields
+\[
+ w_i^*w_j=\delta_{ij}1,\quad \sum_i w_iw_i^*=1,\qquad
+ \rho^2=\lambda\rho,\quad\lambda(x)=\sum_{i=1}^2 w_ixw_i^*.
+\]
+Define $J(x)=[w_i^*\rho(x)w_j]_{ij}$ and $E(x)=\tfrac12\sum_i w_i^*\rho(x)w_i$. The map $J:M\to M_2(M)$ is a normal injective unital $*$-homomorphism. Multiplying $J(x)$ by the row $[w_1\ w_2]$ and its adjoint recovers $\rho(x)$. The normalized partial trace $\tau([a_{ij}])=(a_{11}+a_{22})/2$ is faithful on positive matrices, as seen by writing a positive matrix as $B^*B$. Thus $E=\tau J$ is faithful, normal, unital and completely positive.
+
+\subh{Decomposing the third iterate in two ways}
+The four $a_{ij}=\rho(w_i)w_j$ and the four $b_{ij}=w_iw_j$ each form an orthogonal family of isometries with sum of range projections equal to $1$. Each $t$ in either family intertwines $\rho$ with $\rho^3$, meaning $t\rho(x)=\rho^3(x)t$. Apply $w_j\rho(x)=\rho^2(x)w_j$ twice to see this, applying $\rho$ to the relation once for the $a$ family. Therefore $a_{ij}^*b_{kl}\in N'\cap M$ is scalar. For any $y\in M$, insert $\sum_b bb^*=1$, move the scalar $a^*b$ to the right and sum over $a$ to obtain
+\[
+  \sum_a a^*ya=\sum_{a,b}(a^*b)b^*ya
+  =\sum_b b^*y\Big(\sum_a aa^*\Big)b=\sum_b b^*yb .
+\]
+Apply the identity at $y=\rho^2(x)$. Since $w_k^*\rho^2(x)w_k=\rho(x)$,
+\[
+ E^2(x)=\tfrac14\sum_a a^*\rho^2(x)a
+       =\tfrac14\sum_{k,l} w_l^*w_k^*\rho^2(x)w_kw_l=E(x).
+\]
+
+\subh{Identifying the range}
+If $E(d)=d$, Schwarz's inequality gives $E(d^*d)-d^*d\ge0$. Applying $E$ gives zero by idempotence. Faithfulness gives equality. For $Y=J(d)-\diag(d,d)$, expansion then yields $\tau(Y^*Y)=0$, so $Y=0$. The converse follows from $E=\tau J$. Consequently
+\[
+ D=E(M)=\{d:J(d)=\diag(d,d)\}=\{d:\rho(d)=\lambda(d)\}.
+\]
+The last set is an equalizer of normal $*$-homomorphisms, so $D$ is a von Neumann algebra. The diagonal identity gives $D$-bimodularity of $E$, making $E$ a conditional expectation. Since $\rho^2=\lambda\rho$, we have $N\subset D\subset M$. The center of $D$ lies in $N'\cap M$ and is scalar.
+\newpage
+\heading{Why infinite index is ruled out}
+For $A=[A_{ij}]\ge0$ in $M_2(M)$ and $Z=\diag(1,-1)$, positivity of $ZAZ^*$ gives $A\le 2\diag(A_{11},A_{22})$. Each diagonal entry is positive, so
+\[
+ A\le 2\diag(A_{11}+A_{22},A_{11}+A_{22}).
+\]
+With $A=J(x)$ for $x\ge0$, the right side is $4J(E(x))$ because $E(x)\in D$. The injection $J$ reflects order. Thus $E(x)\ge x/4$.
+
+\subh{Transporting the bound to the image of the endomorphism}
+The isomorphism $K(x)=[w_i^*xw_j]$ identifies $M$ with $M_2(M)$ and $\lambda(M)$ with its constant diagonal copy of $M$. In these coordinates the map $A\mapsto\diag(\tau(A),\tau(A))$ is an expectation onto $\lambda(M)$ and dominates $A/4$. Transport $E$ along $\lambda$ to obtain another expectation, from $\lambda(M)$ onto $\lambda(D)$, with the same lower bound. Their composition gives an expectation $F:M\to\lambda(D)$ satisfying
+\[
+                    F(x)\ge x/16 \qquad (x\ge0).
+\]
+Proposition 7.5 of Bartels, Douglas and Henriques gives finite index for $\lambda(D)\subset M$. Because $\lambda(D)=\rho(D)\subseteq N$, finite index passes to $N\subset M$. Explicitly, Corollary 5.17 transfers finite index to $M'\subset\lambda(D)'$. Apply Lemma 7.8 to $M'\subset N'\subset\lambda(D)'$ to obtain finite index for $M'\subset N'$. The same corollary transfers it back. These results allow factors on arbitrary Hilbert spaces. \src{https://ems.press/content/serial-article-files/36793}{Bartels, Douglas and Henriques, \emph{Dualizability and index of subfactors}}
+
+\subh{Pennig's finite-index contradiction}
+Let $H={}_{\rho}L^2(M)_M$ be the irreducible bimodule of $\rho$. Finite index gives it a dual $\bar H$ and finite positive statistical dimension $d$. Composition gives the tensor square $H\otimes H\cong H\oplus H$, so $d^2=2d$ and $d=2$. Frobenius reciprocity makes the multiplicity of $H$ in $\bar H\otimes H$ equal to $\dim\operatorname{Hom}(H,H\otimes H)=2$. The tensor unit occurs once because $\dim\operatorname{End}(H)=1$. The unit and $H$ have different dimensions. These summands alone have total dimension $1+2d=5$, whereas $\bar H\otimes H$ has dimension $d^2=4$. This contradiction completes the proposed argument. \src{https://mathoverflow.net/a/80030}{Pennig's 2011 argument}
+
+\textbf{Finite multiplicities.} The written argument extends to $\rho^2\cong m\rho$ for every finite $m\ge2$. For a positive $m$-by-$m$ block matrix, write $A=B^*B$ and apply $\|\sum_i v_i\|^2\le m\sum_i\|v_i\|^2$ to its block columns. This gives $A\le m\,\diag(\sum_i A_{ii},\ldots,\sum_i A_{ii})$ and hence $E(x)\ge x/m^2$. Reciprocity would force an object of dimension $m^2$ to contain summands of dimension $1+m^2$. The combined Lean operator inequality treats the listed case $m=2$.
+
+\textbf{Verification status.} The formal files identify exactly which algebraic and matrix lemmas Lean checks. Lean checks the averaging identities and the bound $F(x)\ge x/16$ directly from the splitting assumptions, with an explicit preimage in $D$. The index-theoretic and duality steps use published theorems. Full machine verification and specialist review remain outstanding. A literature search found related multiplicative-unitary results under additional generation hypotheses. Priority for this exclusion remains unconfirmed. \src{https://arxiv.org/abs/math/0001096}{Doplicher, Pinzari and Roberts}
+\newpage
+\heading{Two strategies tested in Lean}
+\subh{Collatz and bounded-step descent}
+Write $T(n)=n/2$ when $n$ is even and $T(n)=3n+1$ when it is odd. Every positive start reaches $1$ if and only if each $n>1$ eventually visits a smaller integer. The reverse direction follows by strong induction. The unresolved issue is how long one may have to wait.
+
+Fix a horizon $H$, a modulus $m>0$ and a rank $r:\mathbb N\to\mathbb N$. Suppose $r$ is eventually nondecreasing within each residue class modulo $m$. Then there are arbitrarily large $n$ with
+\[
+     r(T^j n)\ge r(n)\qquad\text{for every }0\le j\le H.
+\]
+For a large integer $b$, put $s=2^Hbm$. Starting from $2s-1$, the next state is $6s-2$. Each two steps replace $s$ by $3s/2$ while the construction retains sufficient divisibility by two. The odd states increase within one residue class and the even states increase within another. Choose whichever of the first two states has the smaller rank. Neither subsequence can drop below that rank during the next $H$ steps. Lean verifies the quantifiers for both the equivalence and the obstruction. The conjecture permits a descent time depending on the starting point. \src{https://link.springer.com/article/10.1007/s40993-026-00811-5}{November 2026 open-status reference}
+
+\subh{What a residual-state count tells us about SAT}
+Take the Boolean formula $F_k=\bigwedge_{i=1}^k(x_i\lor y_i)$. Assign all the $x_i$ first. If the set assigned false is $S$, the residual formula is $\bigwedge_{i\in S}y_i$. To distinguish two subsets, choose any index in their symmetric difference, set that $y_i$ false and set all others true. There are exactly $2^k$ residual functions. A $k$-bit mask stores the subset. Yet for every $k$ the all-true assignment immediately proves satisfiability.
+
+The Lean file proves the lower bound for a more general graph formula with a matching across a variable cut and proves sharpness for this family. To separate $\mathsf P$ from $\mathsf{NP}$ through SAT, a lower bound must cover algorithms that decide whether any satisfying assignment exists. The state count supplies no such bound. Related representation bounds already appear in the literature. \src{https://link.springer.com/article/10.1007/s00224-016-9715-z}{Bova and Slivovsky} $\cdot$ \src{https://www.claymath.org/millennium/p-vs-np/}{Clay problem statement}
+
+In the 2019 Gasarch poll, 109 of 124 respondents favored $\mathsf P\ne\mathsf{NP}$. D\'oria's 2002 prediction concerns what ZFC can prove. A majority in the later poll expected the separation to be true. \src{https://www.cs.umd.edu/users/gasarch/papers/poll3.pdf}{Gasarch's third poll}
+
+\textbf{Reproducibility.} The companion archive contains checked Lean files, compiler output and pinned toolchain details. Zero complete solutions were submitted to Left To Solve.
+\end{document}
