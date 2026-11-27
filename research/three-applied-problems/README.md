@@ -11,3 +11,10 @@ Research notes prepared with Codex for [LDJAI](https://github.com/LDJAI), Novemb
 The detailed notes identify the target, proof, scope, and related research. To reproduce the finite arithmetic checks, run [check-jensen.py](check-jensen.py) and [verify_rounding.py](verify_rounding.py) with Python 3.
 
 [Geometry listing](https://lefttosolve.com/p/mo-201359) · [Estimation listing](https://lefttosolve.com/p/mo-204379) · [Rounding listing](https://lefttosolve.com/p/mo-364377)
+
+## Formal verification
+
+- [Jensen.lean](Jensen.lean) proves uniqueness of the worst positive parameter for every admissible finite list. The proof's derivative lemmas establish the increase and decrease on opposite sides of the maximizer.
+- [LocalArea.lean](LocalArea.lean) proves the footprint-contraction lemma with real Euclidean area. The global depth and shortest-bisector estimates appear in the [geometry proof](solberg-disk-bisection.md).
+
+[Printable version of all three proofs](three-applied-math-proofs.pdf)
