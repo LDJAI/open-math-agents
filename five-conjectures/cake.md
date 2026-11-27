@@ -2,7 +2,7 @@
 
 Research note, November 26, 2026
 
-Josué Ortega and Erel Segal-Halevi conjectured that a Robertson–Webb mechanism cannot make a connected, proportional division of a mixed cake while satisfying not-obvious manipulability (NOM). The conjecture appears in §7 of their [2020 working paper](https://www.econstor.eu/bitstream/10419/271235/1/qms-rp2020-04.pdf) and §7.2 of the [journal paper](https://doi.org/10.1007/s00355-022-01416-4). The following construction proves existence for two agents. An arbitrary number of agents remains unresolved by this construction.
+Josué Ortega and Erel Segal-Halevi conjectured that a Robertson–Webb mechanism cannot make a connected, proportional division of a mixed cake while satisfying not-obvious manipulability (NOM). The conjecture appears in §7 of their [2020 working paper](https://www.econstor.eu/bitstream/10419/271235/1/qms-rp2020-04.pdf) and §7.2 of the [journal paper](https://doi.org/10.1007/s00355-022-01416-4). The following construction proves existence for two agents. For every finite group size, a separate [full public scalar-query construction](cake-scalar.md) addresses the original normalized, signed model.
 
 ## A four-query protocol
 
@@ -59,3 +59,5 @@ In the zero-total subgame, the approval of a side at a fixed cut is a dominant t
 Finally, at the first, total-value query, a truthful agent of every type can attain the supremum over all endpoint pieces by encountering an opponent with the same total and the appropriate shape. Any deviation yields at most a proportional share against a clone of her true valuation, since the clone always receives at least its own proportional share. This checks every decision node even if an agent lies about the sign of its total.
 
 [Direct-revelation results for all group sizes](cake-direct.md)
+
+[Simultaneous batches for arbitrary group sizes](cake-batched.md) and [an explicit manipulation if the quantile rounds become public one by one](cake-public-rounds.md).

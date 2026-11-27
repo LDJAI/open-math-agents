@@ -1,6 +1,6 @@
 # Proportionality under direct revelation for any number of agents
 
-**Scope.** Agents simultaneously report their entire valuations. This proves an all-population result in the direct-revelation model and answers a related question from §6.2 at this level. It leaves the finite Robertson–Webb question in §7.2 open. Ortega and Segal-Halevi distinguish the two models and already give direct-revelation monotonicity-of-the-extremes lemmas for nonnegative valuations and unrestricted Pareto efficiency. This note uses efficiency relative to a specified class of connected allocations and permits signed valuations in the proportional result. [Original paper, §§3, 6.2 and 7.2](https://doi.org/10.1007/s00355-022-01416-4)
+**Scope.** Agents simultaneously report their entire valuations. This proves an all-population result in the direct-revelation model and answers a related question from §6.2 at this level. A separate [finite public-query proof](cake-scalar.md) addresses §7.2 under the authors’ normalization and first-crossing conventions. Ortega and Segal-Halevi distinguish the two models and already give direct-revelation monotonicity-of-the-extremes lemmas for nonnegative valuations and unrestricted Pareto efficiency. This note uses efficiency relative to a specified class of connected allocations and permits signed valuations in the proportional result. [Original paper, §§3, 6.2 and 7.2](https://doi.org/10.1007/s00355-022-01416-4)
 
 ## Two observations
 
