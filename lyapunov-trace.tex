@@ -1,0 +1,119 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,mathtools,geometry,microtype,xcolor,fancyhdr,hyperref}
+\geometry{top=.83in,bottom=.87in,left=.92in,right=.92in}
+\definecolor{ink}{HTML}{15293C}
+\definecolor{teal}{HTML}{125E63}
+\hypersetup{colorlinks=true,linkcolor=teal,urlcolor=teal,pdftitle={A trace formula for optimal input covariance},pdfauthor={LDJAI, with OpenAI Codex}}
+\pagestyle{fancy}\fancyhf{}\fancyfoot[L]{\small\color{teal}LDJAI\quad /\quad Linear systems}
+\fancyfoot[R]{\small\color{teal}\thepage}\renewcommand{\headrulewidth}{0pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{.48em}
+\setlength{\abovedisplayskip}{.52em}\setlength{\belowdisplayskip}{.5em}
+\newcommand{\tr}{\operatorname{tr}}\newcommand{\D}{\mathcal D}\newcommand{\R}{\mathbb R}
+\newcommand{\subhead}[1]{\par\medskip{\large\bfseries\color{ink}#1}\par\smallskip}
+\newcommand{\pagehead}[1]{{\Large\bfseries\color{ink}#1}\par\medskip}
+\begin{document}
+{\small\sffamily\color{teal}RESEARCH NOTE\hfill NOVEMBER 26, 2026}\par
+\vspace{.16in}
+{\LARGE\bfseries\color{ink} A trace formula for optimal input covariance}\par
+{\normalsize LDJAI, with OpenAI Codex}\par
+\smallskip
+In September 2018, Ludwig asked whether a trace bound holds for a continuous-time Lyapunov equation with an upper triangular drift matrix. Numerical experiments suggested equality. The exact formula below holds for every real Hurwitz matrix, including matrices with nonreal eigenvalues. The argument uses a trace identity twice, once for the system and once for its transpose.
+
+\subhead{Theorem}
+Let $A\in\R^{n\times n}$, $n\ge1$, have all eigenvalues in the open left half-plane. Given an input covariance $X\succ0$ with $\tr X=1$, let $P_X$ solve
+\[
+ A P_X+P_X A^\top=-X.
+\]
+For any $s>0$, put $T=-2\tr A>0$. Then
+\[
+ \boxed{\displaystyle
+ \sup_{X\succ0,\ \tr X=1}\tr\!\left[X(sI+P_X)^{-1}\right]
+      =\frac{T}{1+sT}.}
+\]
+The author asked for the lower bound at $s=1$ and observed numerical equality. Its value is $2\tr A/(2\tr A-1)$.
+
+\subhead{Proof}
+Write $G_A(X)=\int_0^\infty e^{At}X e^{A^\top t}\,dt$. Stability gives exponential decay, so this is a continuous linear map. Differentiating the integrand gives the Lyapunov equation. The homogeneous equation has only the zero solution since $e^{At}Pe^{A^\top t}$ would be constant and tend to zero. Thus $P_X=G_A(X)$. The integral preserves positive semidefiniteness and preserves strict positivity for strictly positive inputs by continuity at $t=0$.
+
+\textbf{Upper bound.} Multiply the Lyapunov equation on the right by $P_X^{-1}$ and take the trace. Cyclicity gives $\tr(XP_X^{-1})=T$. In an orthonormal eigenbasis of $P_X^{-1}$, write its eigenvalues as $u_i$ and the diagonal entries of $X$ as $w_i$. The $w_i$ sum to one, and their weighted mean of $u_i$ is $T$. Jensen's inequality for the strictly concave function $f_s(u)=u/(1+su)$ gives
+\[
+  \tr[X(sI+P_X)^{-1}]=\sum_i w_i f_s(u_i)\le f_s(T).
+\]
+
+\textbf{Lower bound.} Put $c=1/T$ and $\D=\{X\succeq0:\tr X=1\}$. For $Y\in\D$ let $Q=G_{A^\top}(Y)$. Then $\lambda_{\min}(Q)\le c$. Otherwise $Q^{-1}\prec TI$, contradicting the transpose-system identity $\tr(YQ^{-1})=T$. This reasoning also applies when $Y$ is singular, since the contradiction assumes $Q\succ cI$.
+
+The trace adjoint of $G_A$ is $G_{A^\top}$, by cyclicity under the integral. Apply the bilinear minimax theorem with the compact convex set $\D$ as the strategy set for each player. A trace pairing optimized over $\D$ selects the smallest or largest eigenvalue, attained by a unit eigenvector's rank-one projector. Hence
+\[
+ \min_{X\in\D}\lambda_{\max}(G_A(X))
+  =\min_X\max_Y\tr[Y G_A(X)]
+  =\max_Y\min_X\tr[X G_{A^\top}(Y)]
+  =\max_{Y\in\D}\lambda_{\min}(G_{A^\top}(Y))\le c .
+\]
+Choose a minimizer $X_*$. Since $G_A(X_*)\preceq cI$, its objective is at least $1/(s+c)=f_s(T)$. The strictly positive inputs $(1-\varepsilon)X_*+\varepsilon I/n$ converge to $X_*$, and the objective is continuous on $\D$ because $s>0$. This proves the formula.\hfill$\square$
+
+\newpage
+\pagehead{Attainment and control energy}
+For $X\succ0$, every weight in Jensen's inequality is positive, so equality requires $P_X=cI$. The Lyapunov equation then forces $X=-c(A+A^\top)$. This is the unique strictly positive optimizer when $A+A^\top\prec0$. In all other cases only a singular input attains the continuous extension of the objective.
+
+\subhead{The author's follow-up question}
+On 11 September 2018 Ludwig asked whether some $X\succeq0$ gives $P_X\succ0$ and $\tr X/\lambda_{\max}(P_X)=T$. The minimizer from page 1 does. Write $P=G_A(X_*)\preceq cI$. For $v\in\ker P$, the Gramian integral has a continuous nonnegative quadratic integrand. Its value at zero gives $v\in\ker X_*$. The Lyapunov equation now gives $PA^\top v=0$, so $S=\operatorname{ran}P$ is $A$-invariant. If $S$ were proper, $A$ on the nonzero quotient would still be Hurwitz, so $-2\tr(A|_S)<T$. But on $S$ the Gramian $P_S$ is invertible, $P_S\preceq cI$, and $X_S$ carries all the unit trace. The restricted trace identity gives
+\[
+ -2\tr(A|_S)=\tr(X_S P_S^{-1})\ge 1/c=T,
+\]
+a contradiction. Thus $P\succ0$. Its trace identity and $P\preceq cI$ force $\lambda_{\max}(P)=c$, as requested.
+
+\subhead{A worst-direction design guarantee}
+For every $X\in\D$, $\lambda_{\min}(G_A(X))\le c\le\lambda_{\max}(G_A(X))$. For strictly positive $X$ this follows by bounding the mean $\tr(XP_X^{-1})=T$ between the extreme eigenvalues of $P_X^{-1}$. The general case follows by approximation. Minimax for $A$ and for $A^\top$ now gives
+\[
+ \max_{X\in\D}\lambda_{\min}(G_A(X))
+   =c=\min_{X\in\D}\lambda_{\max}(G_A(X)).
+\]
+The two optimizations may use different inputs.
+
+For $\dot z=Az+Bu$, the Gramian is $G_A(BB^\top)$. With a full-rank Gramian, the least energy $\int_{-\infty}^0\!\|u(t)\|^2dt$ needed to reach a target $z$ at time zero from rest in the remote past is $z^\top G_A(BB^\top)^{-1}z$. Indeed, the endpoint operator $K$ satisfies $KK^*=G_A(BB^\top)$, and $K^*(KK^*)^{-1}z$ is the minimum-norm control. A singular Gramian leaves some directions unreachable. Consequently, with unrestricted input directions and total squared actuator gain $\tr(BB^\top)=1$,
+\[
+ \min_B \max_{\|z\|=1}\{\text{minimum energy to reach }z\}=-2\tr A .
+\]
+Every covariance in $\D$ is feasible by taking its square root as $B$. Imposing a limit on actuator number or location changes the feasible set.
+
+\subhead{An independent equality argument}
+Let $\Pi$ be Euclidean projection onto $\D$ in Frobenius norm. Brouwer's theorem gives a fixed point $X$ of $X\mapsto\Pi(X-G_A(X))$. Projection optimality implies $\tr(P_X X)\le\tr(P_XY)$ for every $Y\in\D$. Thus $X$ is supported on the smallest eigenspace of $P_X$. If that eigenvalue were zero, $\operatorname{ran} X\subseteq\ker P_X$. The integral defining $P_X$ gives $\ker P_X\subseteq\ker X$ by evaluating the continuous nonnegative integrand at time zero. This would force $X=0$. Hence $P_X$ is invertible, and $\tr(XP_X^{-1})=T$ gives its smallest eigenvalue $1/T$. This input also attains the claimed value.
+
+\newpage
+\pagehead{A communications consequence and prior work}
+\subhead{The short-packet limit for nonnormal networks}
+Baggio, Rutten, Hennequin and Zampieri studied linear networks with interference from previous packets and additive readout noise. Their normal-network result depends only on the trace of $A$. Here is the precise consequence for general stable $A$ in their model when every state is both an input and an output, unit input power is available, and the readout noise variance is $s>0$.
+
+For packet spacing $h>0$ put
+\[
+ O_h=\int_0^h e^{A^\top t}e^{At}\,dt,\qquad
+ W_h(X)=\sum_{k=0}^\infty e^{Akh}X e^{A^\top kh}.
+\]
+Set $S_h=O_h^{1/2}W_h(X)O_h^{1/2}$ and $D_h=O_h^{1/2}X O_h^{1/2}$. By their equation (5), the rate for input $X$ is
+\[
+ R_h(X)=\frac{\log\det(sI+S_h)-\log\det(sI+S_h-D_h)}{2h\ln 2}.
+\]
+The logarithms in this formula are natural. As $h\downarrow0$, $O_h/h\to I$ and $hW_h(X)\to G_A(X)$ by Riemann summation. The latter limit is uniform on $\D$: in finite dimension it suffices to check convergence on a basis, and exponential decay bounds the infinite tails uniformly for small $h$. Consequently $S_h\to G_A(X)$ and $D_h/h\to X$ uniformly. The identity
+\[
+  \frac{\log\det(sI+S_h)-\log\det(sI+S_h-D_h)}h
+    =\int_0^1\tr\!\left[(sI+S_h-vD_h)^{-1}\frac{D_h}h\right]dv
+\]
+now gives the limit uniformly in $X$. All matrices being inverted are bounded below by $sI$ since $W_h(X)-X\succeq0$. Uniform convergence allows the maximum to pass through the limit. The theorem on page 1 yields
+\[
+ \boxed{\displaystyle \lim_{h\downarrow0}\max_{X\in\D}R_h(X)
+      =\frac{-\tr A}{(1-2s\tr A)\ln 2}.}
+\]
+This identifies the common zero-spacing intercept for normal and nonnormal networks with the same trace. At positive spacing, the paper exhibits performance gains from nonnormality.
+
+\subhead{Sources and scope of the novelty check}
+\small
+\textbf{Original problem.} Ludwig, 4 September 2018. The two posted replies give first-order conditions and orthogonal invariance. The same author's 11 September follow-up records the trace identity and asks the equality question answered on page 2.
+\href{https://mathoverflow.net/q/309804}{Original question}\enspace$\cdot$\enspace\href{https://mathoverflow.net/q/310296}{Follow-up}\enspace$\cdot$\enspace\href{https://lefttosolve.com/p/mo-309804}{Left to Solve record}.
+
+\textbf{Minimax and complementarity.} The proof uses the classical bilinear minimax theorem. General Lyapunov complementarity theory also supplies an equality witness: with $L(Z)=-AZ-ZA^\top$, the real symmetric cone theorem gives $Z\succeq0$, $U=L(Z)+L(I)\succeq0$, $ZU=0$. Then $H=I+Z$ satisfies $HU=U$, forcing $\tr U=\tr(UH^{-1})=T$. Normalizing $P=H/T$ and $X=U/T$ recovers the value on page 1.\quad
+\href{https://doi.org/10.2140/pjm.1958.8.171}{Sion (1958)}\enspace$\cdot$\enspace\href{https://doi.org/10.1016/S0024-3795(00)00208-1}{Gowda and Parthasarathy (2000)}\enspace$\cdot$\enspace\href{https://doi.org/10.1137/S0895479800377927}{Gowda and Song (2002 issue)}.
+
+\textbf{Network model.} Baggio et al., \emph{Science Advances} 6 (2020), eaba2282, especially equations (5) and (8) and supplementary note S5. A search of the original discussion, related MathOverflow questions, control literature and network-communications papers located no earlier proof of the exact unrestricted trace objective. This is a bounded literature search.\quad
+\href{https://doi.org/10.1126/sciadv.aba2282}{Network paper}\enspace$\cdot$\enspace\href{https://github.com/GuillaumeBAUD-coder/open-math-agents/pull/769}{Public proof and Lean statement}.
+\end{document}
